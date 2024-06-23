@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Playful Language",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/playlang.py",
+            "console": "integratedTerminal",
+            "args": [
+                "astrid pig ubbidubbi gibberish opish linguadope backwards blang paffke",
+                "Peter ist lieb, die Trudi ist toll, und Gonzo ist auch prima!"
+            ]
+        },
+        {
+            "name": "Playful Language : List languages plugins",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/playlang.py",
+            "console": "integratedTerminal",
+            "args": "-l"
+        },
+        {
+            "name": "Playful Language : Help",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/playlang.py",
+            "console": "integratedTerminal",
+            "args": "-h"
+        }
+    ]
+}
