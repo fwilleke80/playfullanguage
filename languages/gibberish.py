@@ -1,5 +1,6 @@
 from lib.langlib import *
 
+# Language information
 LANGUAGE_ID = "gibberish"
 LANGUAGE_TITLE = "Gibberish"
 LANGUAGE_VERSION = "0.1"

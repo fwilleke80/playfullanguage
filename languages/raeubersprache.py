@@ -1,5 +1,6 @@
 from lib.langlib import *
 
+# Language information
 LANGUAGE_ID = "astrid"
 LANGUAGE_TITLE = "Räubersprache"
 LANGUAGE_VERSION = "0.1"

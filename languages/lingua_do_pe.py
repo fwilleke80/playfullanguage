@@ -1,5 +1,6 @@
 from lib.langlib import *
 
+# Language information
 LANGUAGE_ID = "linguadope"
 LANGUAGE_TITLE = "Língua do Pê"
 LANGUAGE_VERSION = "0.1"

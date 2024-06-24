@@ -1,5 +1,6 @@
 from lib.langlib import *
 
+# Language information
 LANGUAGE_ID = "opish"
 LANGUAGE_TITLE = "Opish"
 LANGUAGE_VERSION = "0.1"

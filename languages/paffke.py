@@ -1,5 +1,6 @@
 from lib.langlib import *
 
+# Language information
 LANGUAGE_ID = "paffke"
 LANGUAGE_TITLE = "Paffke"
 LANGUAGE_VERSION = "0.1"

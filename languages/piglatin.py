@@ -1,5 +1,6 @@
 from lib.langlib import *
 
+# Language information
 LANGUAGE_ID = "pig"
 LANGUAGE_TITLE = "Pig Latin"
 LANGUAGE_VERSION = "0.1"

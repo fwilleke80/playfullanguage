@@ -1,5 +1,6 @@
 from lib.langlib import *
 
+# Language information
 LANGUAGE_ID = "backwards"
 LANGUAGE_TITLE = "Backwards"
 LANGUAGE_VERSION = "0.1"
