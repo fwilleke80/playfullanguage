@@ -1,7 +1,7 @@
 from lib.langlib import *
 
 LANGUAGE_ID = "blang"
-LANGUAGE_TITLE = "B-Language'"
+LANGUAGE_TITLE = "B-Language"
 LANGUAGE_VERSION = "0.1"
 LANGUAGE_CREDITS = "2024 by Punga"
 LANGUAGE_DESCRIPTION = "Common in some Scandinavian countries, this involves inserting a \"b\" sound after each vowel, followed by the vowel again."
