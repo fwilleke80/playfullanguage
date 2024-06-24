@@ -6,7 +6,7 @@ LANGUAGE_VERSION = "0.1"
 LANGUAGE_CREDITS = "2024 by Punga"
 LANGUAGE_DESCRIPTION = "Common in some Scandinavian countries, this involves inserting a \"b\" sound after each vowel, followed by the vowel again."
 
-
+# Translates a string, and returns the result.
 def translate(input_str: str) -> str:
     words = split_sentence(input_str)
     result_words = []

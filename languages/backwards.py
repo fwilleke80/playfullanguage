@@ -6,7 +6,7 @@ LANGUAGE_VERSION = "0.1"
 LANGUAGE_CREDITS = "2024 by Punga"
 LANGUAGE_DESCRIPTION = "A playful language where words are spoken or written backward."
 
-
+# Translates a string, and returns the result.
 def translate(input_str: str) -> str:
     words = split_sentence(input_str)
     result_words = []

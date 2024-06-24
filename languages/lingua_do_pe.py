@@ -6,7 +6,7 @@ LANGUAGE_VERSION = "0.1"
 LANGUAGE_CREDITS = "2024 by Punga"
 LANGUAGE_DESCRIPTION = "Popular in Brazil and Portugal, this language involves inserting the letter \"p\" before each vowel and repeating the vowel."
 
-
+# Translates a string, and returns the result.
 def translate(input_str: str) -> str:
     words = split_sentence(input_str)
     result_words = []
