@@ -12,11 +12,11 @@ import importlib.util
 
 language_plugins = {}
 
-
+# Error type used if a plugin doesn't define an ID string
 class MissingLanguageIDError(Exception):
     pass
 
-
+# Loads the language plugins and populates global 'language_plugins'.
 def get_language_plugins():
     # Get list of language plugin files
     script_folder = os.path.dirname(os.path.abspath(__file__))
@@ -50,7 +50,7 @@ def get_language_plugins():
 
     return language_plugins
 
-
+# Calls a function in a plugin module
 def call_plugin_function(module, function_name: str, *args, **kwargs):
     result = None
     if hasattr(module, function_name):
@@ -58,23 +58,19 @@ def call_plugin_function(module, function_name: str, *args, **kwargs):
         result = func(*args, **kwargs)
     return result
 
-
+# Sets up the argument parser, does the parsing, and applies argument logic.
 def parse_args():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="A script with a rudimentary plugin system.")
     
-    # Create a mutually exclusive group
-    # group = parser.add_mutually_exclusive_group(required=True)
-    
-    # Add the -languages flag to the group
+    # Add the -languages flag
     parser.add_argument("-languages", "-l", action="store_true", help="List available language plugins.")
     
-    # Add the LANG and INPUT arguments to the group
+    # Add the LANG and INPUT arguments
     parser.add_argument("lang", type=str, metavar="LANG", nargs='?', help=f"Which language {list(language_plugins.keys())}")
     parser.add_argument("input", type=str, metavar="INPUT", nargs='?', help="Input text")
 
     args = parser.parse_args()
-
 
     # Custom logic to enforce mutual exclusivity
     if args.languages:
@@ -88,6 +84,34 @@ def parse_args():
 
     return args
 
+# Prints a list of all language plugins, and their info.
+def print_language_list():
+    try:
+        print(f"Found {len(language_plugins.items())} language plugins:")
+        for plugin_name, plugin_info in language_plugins.items():
+            print("")
+            print(f"{plugin_info['title']} (ID: \"{plugin_info['id']}\")")
+            print(f"Version {plugin_info['version']}") if plugin_info['version'] else _
+            print(f"{plugin_info['credits']}") if plugin_info['credits'] else _
+            print(f"{plugin_info['description']}\n") if plugin_info['description'] else _
+    except MissingLanguageIDError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+# Does all the translation work and output.
+def translate(input_text: str, languages):
+    print(f"Input   : {input_text}\n")
+
+    for lang in languages:
+        # Call a specific function (e.g., 'my_function') from all plugins
+        if lang in language_plugins:
+            # Your existing logic for processing the input with the specified language plugin
+            print(f"Language: {language_plugins[lang]['title']}")
+            result = call_plugin_function(language_plugins[lang]['module'], 'translate', input_text)
+            print(f"Output  : {result}")
+        else:
+            print(f"Error: No language with ID \"{lang}\" found!")
+        print("")
 
 def main():
     # Load language plugins
@@ -98,34 +122,10 @@ def main():
 
     if args.languages:
         # If the -languages flag is set, print the available language plugins
-        try:
-            print(f"Found {len(language_plugins.items())} language plugins:")
-            for plugin_name, plugin_info in language_plugins.items():
-                print("")
-                print(f"{plugin_info['title']} (ID: \"{plugin_info['id']}\")")
-                print(f"Version {plugin_info['version']}") if plugin_info['version'] else _
-                print(f"{plugin_info['credits']}") if plugin_info['credits'] else _
-                print(f"{plugin_info['description']}\n") if plugin_info['description'] else _
-        except MissingLanguageIDError as e:
-            print(f"Error: {e}")
-            sys.exit(1)
+        print_language_list()
     else:
         # If the -languages flag is not set, proceed with the normal functionality
-        input_text = args.input
-        languages = args.lang.split()
-
-        print(f"Input   : {input_text}\n")
-
-        for lang in languages:
-            # Call a specific function (e.g., 'my_function') from all plugins
-            if lang in language_plugins:
-                # Your existing logic for processing the input with the specified language plugin
-                print(f"Language: {language_plugins[lang]['title']}")
-                result = call_plugin_function(language_plugins[lang]['module'], 'translate', input_text)
-                print(f"Output  : {result}")
-            else:
-                print(f"Error: No language with ID \"{lang}\" found!")
-            print("")
+        translate(args.input, args.lang.split())
 
 if __name__ == "__main__":
     main()
