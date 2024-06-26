@@ -13,6 +13,8 @@ from lib.langlib import *
 SCRIPT_NAME: str = "Playful Language"
 SCRIPT_VERSION: str = "1.1"
 
+TEST_SENTENCE: str = "The big brown fox jumps over the lazy dog"
+
 language_plugins = {}
 
 # Error type used if a plugin doesn't define an ID string
@@ -104,20 +106,6 @@ def parse_args() -> None:
 
     return args
 
-# Prints a list of all language plugins, and their info.
-def print_language_list() -> None:
-    try:
-        print(f"Found {len(language_plugins.items())} language plugins:")
-        for plugin_name, plugin_info in language_plugins.items():
-            print("")
-            print(f"{plugin_info['title']} (ID: \"{plugin_info['id']}\")")
-            print(f"Version {plugin_info['version']}") if plugin_info['version'] else _
-            print(f"{plugin_info['credits']}") if plugin_info['credits'] else _
-            print(f"{plugin_info['description']}\n") if plugin_info['description'] else _
-    except MissingLanguageIDError as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-
 # Calls a function in a plugin module
 def call_plugin_function(module, function_name: str, *args, **kwargs):
     result = None
@@ -135,34 +123,51 @@ def get_translate_function_index(lang: str):
         return 1
     return -1
 
+def translate(input_str: str, lang: str):
+    translate_function_index = get_translate_function_index(lang)
+    if translate_function_index == 0:
+        result = call_plugin_function(language_plugins[lang]['module'], language_plugins[lang]['translate_function_name'], input_text)
+    elif translate_function_index == 1:
+        words = split_sentence(input_str)
+        result_words = []
+        for word in words:
+            if not check_is_only_punctuation(word):
+                result_word = call_plugin_function(language_plugins[lang]['module'], language_plugins[lang]['translate_function_name'], word)
+                result_words.append(result_word)
+            else:
+                result_words.append(word)
+        result = join_sentence(result_words)
+    else:
+        result = None
+
+    return result
+
 # Does all the translation work and output.
-def translate(input_text: str, languages) -> None:
+def do_translate(input_text: str, languages) -> None:
     for lang in languages:
         # Call a specific function (e.g., 'my_function') from all plugins
         if lang in language_plugins:
-            # Your existing logic for processing the input with the specified language plugin
-            print(f"Language: {language_plugins[lang]['title']}")
-            translate_function_index = get_translate_function_index(lang)
-            if translate_function_index == 0:
-                result = call_plugin_function(language_plugins[lang]['module'], language_plugins[lang]['translate_function_name'], input_text)
-            elif translate_function_index == 1:
-                words = split_sentence(input_text)
-                result_words = []
-                for word in words:
-                    if not check_is_only_punctuation(word):
-                        result_word = call_plugin_function(language_plugins[lang]['module'], language_plugins[lang]['translate_function_name'], word)
-                        result_words.append(result_word)
-                    else:
-                        result_words.append(word)
+            result = translate(input_str, lang)
 
-                result = join_sentence(result_words)
-
-            else:
-                argument_value = None
             print(f"Output  : {result}")
         else:
             print(f"Error: No language with ID \"{lang}\" found!")
         print("")
+
+# Prints a list of all language plugins, and their info.
+def print_language_list() -> None:
+    try:
+        print(f"Found {len(language_plugins.items())} language plugins:")
+        for plugin_name, plugin_info in language_plugins.items():
+            print("")
+            print(f"{plugin_info['title']} (ID: \"{plugin_info['id']}\")")
+            print(f"Version {plugin_info['version']}") if plugin_info['version'] else _
+            print(f"{plugin_info['credits']}") if plugin_info['credits'] else _
+            print(f"{plugin_info['description']}") if plugin_info['description'] else _
+            print(f"Test: {translate(TEST_SENTENCE, plugin_info['id'])}\n")
+    except MissingLanguageIDError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 
 def main() -> None:
     title_str = f"{SCRIPT_NAME} {SCRIPT_VERSION}"
@@ -182,7 +187,7 @@ def main() -> None:
         print_language_list()
     else:
         # If the -languages flag is not set, proceed with the normal functionality
-        translate(args.input, args.lang.split())
+        do_translate(args.input, args.lang.split())
 
 
 if __name__ == "__main__":
