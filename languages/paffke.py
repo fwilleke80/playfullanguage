@@ -18,7 +18,8 @@ def translate_word(word) -> str:
 
     # Translate
     result_word = ""
-    for c in word:
+    letters = list(iterate_letters_with_clusters(word))
+    for c in letters:
         if check_starts_with_vowel(c):
             result_word += c + "paff" + c
         else:
