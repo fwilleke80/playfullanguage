@@ -10,9 +10,28 @@
             "request": "launch",
             "program": "${workspaceFolder}/playlang.py",
             "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "name": "Playful Language (test sentence)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/playlang.py",
+            "console": "integratedTerminal",
             "args": [
                 "astrid pig ubbidubbi gibberish opish linguadope backwards blang paffke",
                 "Peter ist lieb, die Trudi ist toll, und Gonzo ist auch prima!"
+            ]
+        },
+        {
+            "name": "Playful Language (test sentence, only 'astrid')",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/playlang.py",
+            "console": "integratedTerminal",
+            "args": [
+                "astrid",
+                "Flower, shower, power, school!"
             ]
         },
         {
