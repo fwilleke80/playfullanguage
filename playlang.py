@@ -13,7 +13,7 @@ from lib.langlib import *
 SCRIPT_NAME: str = "Playful Language"
 SCRIPT_VERSION: str = "1.1"
 
-TEST_SENTENCE: str = "The big brown fox jumps over the lazy dog"
+TEST_SENTENCE: str = "The big brown fox jumps over the lazy dog."
 
 language_plugins = {}
 
