@@ -10,6 +10,8 @@ import argparse
 import importlib.util
 from lib.langlib import *
 
+SCRIPT_NAME: str = "Playful Language"
+SCRIPT_VERSION: str = "1.1"
 
 language_plugins = {}
 
@@ -65,25 +67,17 @@ def get_language_plugins():
 
     return language_plugins
 
-# Calls a function in a plugin module
-def call_plugin_function(module, function_name: str, *args, **kwargs):
-    result = None
-    if hasattr(module, function_name):
-        func = getattr(module, function_name)
-        result = func(*args, **kwargs)
-    return result
-
 # Sets up the argument parser, does the parsing, and applies argument logic.
 def parse_args() -> None:
     # Parse command line arguments
-    parser = argparse.ArgumentParser(description="A script with a rudimentary plugin system.")
+    parser = argparse.ArgumentParser(description=f"Translates any sentence to up to {len(language_plugins.keys())} playful languages.")
     
     # Add the -languages flag
     parser.add_argument("-languages", "-l", action="store_true", help="List available language plugins.")
     
     # Add the LANG and INPUT arguments
-    parser.add_argument("lang", type=str, metavar="LANG", nargs='?', help=f"Which language {list(language_plugins.keys())}")
-    parser.add_argument("input", type=str, metavar="INPUT", nargs='?', help="Input text")
+    parser.add_argument("lang", type=str, metavar="LANG", nargs='?', help=f"Which language(s) {list(language_plugins.keys())}. (Specify multiple languages separated by space ' '.)")
+    parser.add_argument("input", type=str, metavar="INPUT", nargs='?', default="", help="Input text to translate")
 
     args = parser.parse_args()
 
@@ -91,11 +85,22 @@ def parse_args() -> None:
     if args.languages:
         if args.lang or args.input:
             parser.error("'-languages' cannot be used with 'lang' and 'input' arguments.")
-        print("Listing available language plugins...")
+        print("Listing available language plugins...\n")
     else:
-        if not args.lang or not args.input:
-            parser.error("Both 'lang' and 'input' arguments are required unless using '-languages'.")
-        print(f"Processing language: {args.lang} with input: {args.input}")
+        if not args.lang:
+            print("'lang' has not been specified! Please specify language(s) now:")
+            print(f"(Supported languages: {list(language_plugins.keys())})")
+            args.lang = input(":: ")
+            if not args.lang:
+                parser.error("'lang' argument is required unless using '-languages'.")
+            print("")
+        if args.input == "":
+            print("'input' has not been specified! Please write something now:")
+            args.input = input(":: ")
+            if not args.input:
+                parser.error("Both 'lang' and 'input' arguments are required unless using '-languages'.")
+            print("")
+        print(f"Processing language{'s' if len(args.lang.split()) > 1 else ''}: '{args.lang}' with input: {args.input}")
 
     return args
 
@@ -113,6 +118,14 @@ def print_language_list() -> None:
         print(f"Error: {e}")
         sys.exit(1)
 
+# Calls a function in a plugin module
+def call_plugin_function(module, function_name: str, *args, **kwargs):
+    result = None
+    if hasattr(module, function_name):
+        func = getattr(module, function_name)
+        result = func(*args, **kwargs)
+    return result
+
 # Returns a value that indicates what to pass to the translate function as arguments.
 def get_translate_function_index(lang: str):
     function_name = language_plugins[lang]['translate_function_name']
@@ -124,8 +137,6 @@ def get_translate_function_index(lang: str):
 
 # Does all the translation work and output.
 def translate(input_text: str, languages) -> None:
-    print(f"Input   : {input_text}\n")
-
     for lang in languages:
         # Call a specific function (e.g., 'my_function') from all plugins
         if lang in language_plugins:
@@ -154,6 +165,12 @@ def translate(input_text: str, languages) -> None:
         print("")
 
 def main() -> None:
+    title_str = f"{SCRIPT_NAME} {SCRIPT_VERSION}"
+    print(title_str)
+    print("=" * len(title_str))
+    print("")
+
+
     # Load language plugins
     language_plugins = get_language_plugins()
 
