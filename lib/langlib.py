@@ -64,7 +64,7 @@ def join_sentence(tokens: list[str]) -> str:
     """
     result = ""
     for token in tokens:
-        if len(result) > 0 and not check_is_only_punctuation(token):
+        if len(result) > 0 and not check_is_only_punctuation(token[0]):
             result += " "
         result += token
     return result
