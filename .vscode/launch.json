@@ -35,6 +35,17 @@
             ]
         },
         {
+            "name": "Playful Language Berlin",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/playlang.py",
+            "console": "integratedTerminal",
+            "args": [
+                "berlin",
+                "Guck mal, ich finde die kleinen Brötchen besser als das alte! Da ist mehr Geschmack drin."
+            ]
+        },
+        {
             "name": "Playful Language : List languages plugins",
             "type": "debugpy",
             "request": "launch",
