@@ -147,8 +147,9 @@ def do_translate(input_text: str, languages) -> None:
     for lang in languages:
         # Call a specific function (e.g., 'my_function') from all plugins
         if lang in language_plugins:
-            result = translate(input_str, lang)
+            result = translate(input_text, lang)
 
+            print(f"Language: {language_plugins[lang]['title']}")
             print(f"Output  : {result}")
         else:
             print(f"Error: No language with ID \"{lang}\" found!")
